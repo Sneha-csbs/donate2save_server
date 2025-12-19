@@ -4,6 +4,7 @@ dotenv.config();
 import express from "express";
 import cors from "cors";
 import connectDB from "./Db/Db.js";
+
 import donateRoute from "./Routes/DonateRoute.js";
 import requestRoute from "./Routes/RequestRoute.js";
 import appointmentRoute from "./Routes/AppointmentRoute.js";
@@ -14,8 +15,15 @@ import notificationRoute from "./Routes/NotificationRoute.js";
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// ✅ CORS FIX (VERY IMPORTANT)
+app.use(cors({
+  origin: "https://donate2save.netlify.app",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
+
+app.options("*", cors());
 app.use(express.json());
 
 // DB Connection
@@ -36,5 +44,5 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () =>
-  console.log(`Server running on http://localhost:${PORT}`)
+  console.log(`Server running on port ${PORT}`)
 );
