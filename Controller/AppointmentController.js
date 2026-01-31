@@ -5,7 +5,20 @@ import DonorHistory from "../Model/DonorHistoryModel.js";
 export const createAppointment = async (req, res) => {
   try {
     console.log('Creating appointment with data:', req.body);
+    console.log('User:', req.user);
+    
+    // Validate required fields
+    const { donorId, requesterId, bg, hospital, requestId } = req.body;
+    if (!donorId || !requesterId || !bg || !hospital || !requestId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Missing required fields: donorId, requesterId, bg, hospital, requestId'
+      });
+    }
+    
     const appointment = await Appointment.create(req.body);
+    console.log('Appointment created:', appointment);
+    
     res.status(201).json({
       success: true,
       data: appointment
